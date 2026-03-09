@@ -36,22 +36,46 @@
                 transform: scale(1.05);
             }
         }
+        #boops {
+            bottom: 5px;
+            color: #1ed7ff;
+            font-size: 5rem;
+            position: absolute;
+            right: 5px;
+            text-shadow: 5px 5px 5px #333;
+        }
     </style>
     <script>
+        let boops = 0;
+        if (localStorage) {
+            const storedBoops = localStorage.getItem("boops");
+            if (storedBoops) {
+                boops = Number(storedBoops);
+            }
+        }
         const doggoCalculation = () => {
             const doggo = document.getElementById('doggo');
             const snoot = document.getElementById('snoot');
             const ratio = doggo.naturalHeight / doggo.clientHeight;
             snoot.height = snoot.naturalHeight / ratio;
         };
+        const placeBoops = () => {
+            const boopsHolder = document.getElementById('boops');
+            if (boopsHolder) {
+                boopsHolder.innerText = boops;
+            }
+        }
         window.addEventListener('resize', doggoCalculation);
         window.addEventListener('load', () => {
             doggoCalculation();
+            placeBoops();
             const snoot = document.getElementById('snoot');
             snoot.addEventListener('click', () => {
                 const audio = document.createElement("audio");
                 audio.src = "boop.mp3";
                 audio.play().catch();
+                localStorage.setItem("boops", (++boops).toString());
+                placeBoops();
             });
         });
     </script>
@@ -60,6 +84,7 @@
     <div id="container">
         <img alt="" id="doggo" src="doggo.jpg" />
         <img alt="" id="snoot" src="snoot.png" />
+        <div id="boops">0</div>
     </div>
 </body>
 </html>
